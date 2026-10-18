@@ -10,7 +10,14 @@ public static class SeedData
     public static async Task InitializeAsync(IServiceProvider sp)
     {
         var db = sp.GetRequiredService<ApplicationDbContext>();
-        await db.Database.MigrateAsync();
+       if (db.Database.IsNpgsql())
+{
+    await db.Database.EnsureCreatedAsync();
+}
+else
+{
+    await db.Database.MigrateAsync();
+}
 
         var roles = sp.GetRequiredService<RoleManager<IdentityRole>>();
         var users = sp.GetRequiredService<UserManager<IdentityUser>>();
