@@ -1,3 +1,4 @@
+
 @page
 @model EduTracker.Areas.Identity.Pages.Account.LoginModel
 
@@ -6,74 +7,302 @@
 }
 
 <style>
-    .login-page {
-        max-width: 420px;
-        margin: 60px auto;
-        padding: 32px;
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 16px;
-        box-shadow: 0 10px 35px rgba(0,0,0,.08);
-        color: #202b45;
+    .et-auth {
+        --primary: #5b5ce2;
+        --text: #182033;
+        --muted: #778197;
+        min-height: 82vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 18px;
+        font-family: Inter, "Segoe UI", sans-serif;
+        background:
+            radial-gradient(ellipse at 10% 10%, #e8eaff 0, transparent 45%),
+            radial-gradient(ellipse at 90% 90%, #e6f7ff 0, transparent 42%);
     }
-    .login-page h1 { text-align: center; margin-bottom: 8px; }
-    .login-page p { text-align: center; color: #667085; }
-    .login-page label { display: block; margin: 16px 0 6px; }
-    .login-page input[type="email"],
-    .login-page input[type="password"] {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #d0d5dd;
-        border-radius: 8px;
+
+    .et-auth *,
+    .et-auth *::before,
+    .et-auth *::after {
         box-sizing: border-box;
     }
-    .login-page .remember { margin-top: 16px; }
-    .login-page button {
+
+    .et-card {
         width: 100%;
-        margin-top: 20px;
-        padding: 12px;
-        border: 0;
-        border-radius: 8px;
-        background: #526ee8;
-        color: white;
-        font-weight: 600;
-        cursor: pointer;
+        max-width: 440px;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid #e8eaf2;
+        border-radius: 24px;
+        box-shadow: 0 24px 70px rgba(35, 45, 90, 0.11);
+        transition: transform .25s ease, box-shadow .25s ease;
+        animation: et-enter .5s ease both;
     }
-    .login-page .links { margin-top: 20px; text-align: center; }
-    .login-page a { color: #526ee8; }
-    .validation { color: #c62828; }
+
+    .et-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 30px 80px rgba(35, 45, 90, 0.15);
+    }
+
+    .et-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+
+    .et-logo {
+        display: grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        color: white;
+        font-size: 22px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #7778ff, #4c4dd1);
+        box-shadow: 0 8px 18px rgba(91, 92, 226, .25);
+    }
+
+    .et-brand-name {
+        color: var(--text);
+        font-size: 21px;
+        font-weight: 800;
+        letter-spacing: -.7px;
+    }
+
+    .et-brand-tag {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+    .et-heading {
+        color: var(--text);
+        font-size: clamp(27px, 5vw, 33px);
+        font-weight: 800;
+        letter-spacing: -1.2px;
+        margin: 0 0 9px;
+    }
+
+    .et-subtitle {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.7;
+        margin: 0 0 28px;
+    }
+
+    .et-field {
+        margin-bottom: 19px;
+    }
+
+    .et-field label {
+        display: block;
+        color: #343e53;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .et-field input[type="email"],
+    .et-field input[type="password"] {
+        width: 100%;
+        height: 49px;
+        padding: 0 15px;
+        border: 1px solid #dfe3ed;
+        border-radius: 11px;
+        outline: none;
+        background: #fbfcff;
+        color: var(--text);
+        font: inherit;
+        font-size: 14px;
+        transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+
+    .et-field input:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(91, 92, 226, .12);
+    }
+
+    .et-field input::placeholder {
+        color: #a4adbd;
+    }
+
+    .et-validation {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 6px;
+        display: block;
+    }
+
+    .et-options {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 2px 0 23px;
+        font-size: 12px;
+    }
+
+    .et-remember {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: #657087;
+    }
+
+    .et-remember input {
+        accent-color: var(--primary);
+        width: 15px;
+        height: 15px;
+    }
+
+    .et-auth a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color .2s;
+    }
+
+    .et-auth a:hover {
+        color: #393ac0;
+        text-decoration: underline;
+    }
+
+    .et-submit {
+        width: 100%;
+        min-height: 50px;
+        border: 0;
+        border-radius: 12px;
+        background: linear-gradient(110deg, #6869f0, #4e4fd0);
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 18px rgba(91, 92, 226, .22);
+        transition: transform .2s, box-shadow .2s, filter .2s;
+    }
+
+    .et-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(91, 92, 226, .32);
+        filter: brightness(1.04);
+    }
+
+    .et-submit:active {
+        transform: scale(.99);
+    }
+
+    .et-divider {
+        height: 1px;
+        background: #edf0f5;
+        margin: 25px 0 20px;
+    }
+
+    .et-footer {
+        color: var(--muted);
+        font-size: 13px;
+        text-align: center;
+        line-height: 1.8;
+    }
+
+    .et-footer p {
+        margin: 7px 0;
+    }
+
+    @@keyframes et-enter {
+        from { opacity: 0; transform: translateY(14px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@media (max-width: 480px) {
+        .et-auth {
+            padding: 22px 12px;
+        }
+
+        .et-card {
+            padding: 27px 22px;
+            border-radius: 19px;
+        }
+
+        .et-heading {
+            letter-spacing: -.7px;
+        }
+    }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .et-card, .et-submit, .et-field input {
+            animation: none;
+            transition: none;
+        }
+    }
 </style>
 
-<div class="login-page">
-    <h1>Welcome Back</h1>
-    <p>Sign in to your EduTrack account</p>
+<div class="et-auth">
+    <div class="et-card">
 
-    <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
-        <div asp-validation-summary="ModelOnly" class="validation"></div>
-
-        <label asp-for="Input.Email">Email Address</label>
-        <input asp-for="Input.Email" type="email" autocomplete="username"
-               placeholder="Enter your email" />
-        <span asp-validation-for="Input.Email" class="validation"></span>
-
-        <label asp-for="Input.Password">Password</label>
-        <input asp-for="Input.Password" type="password"
-               autocomplete="current-password" placeholder="Enter your password" />
-        <span asp-validation-for="Input.Password" class="validation"></span>
-
-        <div class="remember">
-            <input asp-for="Input.RememberMe" />
-            <label asp-for="Input.RememberMe" style="display:inline">
-                Remember me
-            </label>
+        <div class="et-brand">
+            <div class="et-logo">E</div>
+            <div>
+                <div class="et-brand-name">EduTrack</div>
+                <div class="et-brand-tag">Your learning journey, simplified.</div>
+            </div>
         </div>
 
-        <button type="submit">Sign In</button>
-    </form>
+        <h1 class="et-heading">Welcome back 👋</h1>
+        <p class="et-subtitle">
+            Sign in to continue your learning journey and access your dashboard.
+        </p>
 
-    <div class="links">
-        <p><a asp-page="./Register">Create an account</a></p>
-        <p><a asp-page="./ForgotPassword">Forgot password?</a></p>
+        <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+            <div asp-validation-summary="ModelOnly"
+                 class="et-validation"></div>
+
+            <div class="et-field">
+                <label asp-for="Input.Email">Email address</label>
+                <input asp-for="Input.Email"
+                       type="email"
+                       autocomplete="username"
+                       placeholder="you@example.com" />
+                <span asp-validation-for="Input.Email"
+                      class="et-validation"></span>
+            </div>
+
+            <div class="et-field">
+                <label asp-for="Input.Password">Password</label>
+                <input asp-for="Input.Password"
+                       type="password"
+                       autocomplete="current-password"
+                       placeholder="Enter your password" />
+                <span asp-validation-for="Input.Password"
+                      class="et-validation"></span>
+            </div>
+
+            <div class="et-options">
+                <label class="et-remember">
+                    <input asp-for="Input.RememberMe" />
+                    Remember me
+                </label>
+
+                <a asp-page="./ForgotPassword">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="et-submit">
+                Sign in to EduTrack →
+            </button>
+        </form>
+
+        <div class="et-divider"></div>
+
+        <div class="et-footer">
+            <p>New to EduTrack?
+                <a asp-page="./Register">Create an account</a>
+            </p>
+            <p>Secure access to your learning space.</p>
+        </div>
+
     </div>
 </div>
 
