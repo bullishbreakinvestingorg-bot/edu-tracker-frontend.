@@ -29,3 +29,115 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+
+/* ===== EduTrack Modern Login UI ===== */
+
+:root {
+    --edu-blue: #3478f6;
+    --edu-blue-dark: #245edb;
+    --edu-light: #eef5ff;
+    --edu-text: #1e293b;
+}
+
+/* Smooth page appearance */
+body {
+    color: var(--edu-text);
+    background: linear-gradient(135deg, #ffffff 45%, #eef5ff 100%);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Login and account card */
+.account-container,
+.account-box,
+.login-logout-card {
+    animation: eduFadeIn 0.7s ease-out both;
+}
+
+.account-box,
+.login-logout-card .card {
+    border: 1px solid #e4edfc;
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(52, 120, 246, 0.12);
+    background: rgba(255, 255, 255, 0.96);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.account-box:hover,
+.login-logout-card .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px rgba(52, 120, 246, 0.18);
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: var(--edu-text);
+    font-weight: 700;
+}
+
+/* Input fields */
+.form-control {
+    border: 1px solid #d9e4f5;
+    border-radius: 10px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.form-control:focus {
+    border-color: var(--edu-blue);
+    box-shadow: 0 0 0 3px rgba(52, 120, 246, 0.13);
+}
+
+/* Blue buttons */
+.btn-primary {
+    background: var(--edu-blue);
+    border-color: var(--edu-blue);
+    border-radius: 10px;
+    font-weight: 600;
+    transition: background 0.25s ease,
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.btn-primary:hover {
+    background: var(--edu-blue-dark);
+    border-color: var(--edu-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(52, 120, 246, 0.25);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Links */
+a {
+    color: var(--edu-blue);
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--edu-blue-dark);
+}
+
+/* Entrance animation */
+@keyframes eduFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Respect reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
