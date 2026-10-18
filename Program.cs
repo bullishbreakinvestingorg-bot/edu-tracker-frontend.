@@ -1,19 +1,46 @@
+
 using EduTrack.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ---------- Database connection (reads appsettings.json) ----------
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var databaseUrl = builder.Configuration["DATABASE_URL"];
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+if (!string.IsNullOrWhiteSpace(databaseUrl))
+{
+    var uri = new Uri(databaseUrl);
+    var credentials = uri.UserInfo.Split(':', 2);
+
+    var pgConnection = new NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.Port > 0 ? uri.Port : 5432,
+        Database = uri.AbsolutePath.Trim('/'),
+        Username = Uri.UnescapeDataString(credentials[0]),
+        Password = credentials.Length > 1
+            ? Uri.UnescapeDataString(credentials[1])
+            : "",
+        SslMode = SslMode.Require
+    }.ConnectionString;
+
+    builder.Services.AddDbContext<ApplicationDbContext>(
+        options => options.UseNpgsql(pgConnection));
+}
+else
+{
+    var connectionString =
+        builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException(
+            "Database connection string not found.");
+
+    builder.Services.AddDbContext<ApplicationDbContext>(
+        options => options.UseSqlServer(connectionString));
+}
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// ---------- Login system (Identity) ----------
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
         options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
@@ -23,13 +50,11 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// ---------- Create database + demo data on startup ----------
 using (var scope = app.Services.CreateScope())
 {
     await SeedData.InitializeAsync(scope.ServiceProvider);
 }
 
-// ---------- Request pipeline ----------
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
