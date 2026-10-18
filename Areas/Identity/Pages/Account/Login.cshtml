@@ -1,157 +1,82 @@
 @page
-@model LoginModel
-﻿
-/* EduTrack — Light Premium Theme */
+@model EduTracker.Areas.Identity.Pages.Account.LoginModel
 
-.et-login {
-    --et-text: #202b45;
-    --et-muted: #77839c;
-    background:
-        radial-gradient(ellipse at 10% 10%, #dce8ff 0%, transparent 45%),
-        radial-gradient(ellipse at 95% 90%, #d9f5ff 0%, transparent 40%),
-        #f5f7fc;
-    color: #202b45;
+@{
+    ViewData["Title"] = "Login";
 }
 
-.et-orb {
-    opacity: .18;
-    filter: blur(95px);
-}
-
-.et-orb.one { background: #809cff; }
-.et-orb.two { background: #6ad8eb; }
-
-.et-shell {
-    background: rgba(255,255,255,.94);
-    border: 1px solid #e7ebf5;
-    box-shadow: 0 24px 70px rgba(44, 65, 115, .10);
-    backdrop-filter: blur(18px);
-    transition: box-shadow .3s ease, transform .3s ease;
-}
-
-.et-shell:hover {
-    box-shadow: 0 28px 78px rgba(44, 65, 115, .14);
-    transform: translateY(-2px);
-}
-
-/* Soft blue showcase panel */
-.et-showcase {
-    background:
-        radial-gradient(ellipse at 90% 10%, #d9e6ff 0%, transparent 48%),
-        linear-gradient(145deg, #f0f4ff, #e8f5ff);
-    border-right: 1px solid #e0e8f7;
-}
-
-.et-showcase::before {
-    border-color: #8aa5e72b;
-    box-shadow:
-        0 0 0 35px #8aa5e710,
-        0 0 0 75px #8aa5e708;
-}
-
-.et-brand-name { color: #243453; }
-.et-brand-sub { color: #8290aa; }
-
-.et-logo {
-    background: linear-gradient(135deg, #668bff, #8069e9);
-    box-shadow: 0 7px 20px #7189e92b;
-}
-
-.et-pill {
-    color: #536fd0;
-    background: #ffffffa8;
-    border-color: #cbd8fa;
-}
-
-.et-hero h1 { color: #202d49; }
-.et-hero p { color: #74819a; }
-
-.et-feature { color: #465572; }
-
-.et-feature-icon {
-    color: #627fe0;
-    background: #ffffffbd;
-    border-color: #dce5fa;
-}
-
-.et-footnote { color: #8491a8; }
-
-/* Form area */
-.et-form-side h2 { color: #202b45; }
-.et-subtitle { color: #8490a6; }
-
-.et-label { color: #43516d; }
-
-.et-input {
-    color: #26334e;
-    background: #f8faff;
-    border-color: #e1e7f2;
-}
-
-.et-input::placeholder { color: #a0aabe; }
-.et-input-icon { color: #8798bd; }
-
-.et-input:hover { border-color: #b9c8f2; }
-
-.et-input:focus {
-    background: #fff;
-    border-color: #8199f6;
-    box-shadow: 0 0 0 4px #8199f61b;
-}
-
-.et-remember { color: #65728b; }
-.et-link { color: #627be0; }
-.et-link:hover { color: #4b5fc4; }
-
-.et-submit {
-    background: linear-gradient(105deg, #6486f4, #8270e9);
-    box-shadow: 0 6px 18px #7188e927;
-}
-
-.et-submit:hover {
-    box-shadow: 0 9px 24px #7188e93a;
-    filter: brightness(1.035);
-}
-
-.et-register { color: #8792a7; }
-
-.et-divider { color: #98a2b6; }
-
-.et-divider::before,
-.et-divider::after { background: #e9edf5; }
-
-.et-external button {
-    color: #475570;
-    background: #fafbff;
-    border-color: #e3e8f3;
-}
-
-.et-external button:hover {
-    background: #f0f4ff;
-    border-color: #cbd7fb;
-}
-
-/* Gentle animation, not flashy */
-.et-shell {
-    animation: et-light-enter .65s cubic-bezier(.2,.7,.2,1) both;
-}
-
-.et-orb {
-    animation-duration: 18s;
-}
-
-@@keyframes et-light-enter {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@@media (prefers-reduced-motion: reduce) {
-    .et-shell, .et-orb, .et-pulse {
-        animation: none !important;
+<style>
+    .login-page {
+        max-width: 420px;
+        margin: 60px auto;
+        padding: 32px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0,0,0,.08);
+        color: #202b45;
     }
-
-    .et-shell, .et-feature, .et-submit {
-        transition: none !important;
+    .login-page h1 { text-align: center; margin-bottom: 8px; }
+    .login-page p { text-align: center; color: #667085; }
+    .login-page label { display: block; margin: 16px 0 6px; }
+    .login-page input[type="email"],
+    .login-page input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d0d5dd;
+        border-radius: 8px;
+        box-sizing: border-box;
     }
-}
+    .login-page .remember { margin-top: 16px; }
+    .login-page button {
+        width: 100%;
+        margin-top: 20px;
+        padding: 12px;
+        border: 0;
+        border-radius: 8px;
+        background: #526ee8;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .login-page .links { margin-top: 20px; text-align: center; }
+    .login-page a { color: #526ee8; }
+    .validation { color: #c62828; }
+</style>
 
+<div class="login-page">
+    <h1>Welcome Back</h1>
+    <p>Sign in to your EduTrack account</p>
+
+    <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+
+        <label asp-for="Input.Email">Email Address</label>
+        <input asp-for="Input.Email" type="email" autocomplete="username"
+               placeholder="Enter your email" />
+        <span asp-validation-for="Input.Email" class="validation"></span>
+
+        <label asp-for="Input.Password">Password</label>
+        <input asp-for="Input.Password" type="password"
+               autocomplete="current-password" placeholder="Enter your password" />
+        <span asp-validation-for="Input.Password" class="validation"></span>
+
+        <div class="remember">
+            <input asp-for="Input.RememberMe" />
+            <label asp-for="Input.RememberMe" style="display:inline">
+                Remember me
+            </label>
+        </div>
+
+        <button type="submit">Sign In</button>
+    </form>
+
+    <div class="links">
+        <p><a asp-page="./Register">Create an account</a></p>
+        <p><a asp-page="./ForgotPassword">Forgot password?</a></p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
