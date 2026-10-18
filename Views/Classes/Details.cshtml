@@ -1,0 +1,38 @@
+﻿@using EduTrack.Models
+@model Classroom
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@Model.Name @Model.Division – @Model.Subject</h2>
+    <a class="btn btn-success" asp-controller="Attendance" asp-action="Mark" asp-route-classId="@Model.Id">Take Attendance</a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form method="post" asp-action="AddStudent" class="row g-2 mb-4">
+    <input type="hidden" name="classId" value="@Model.Id" />
+    <div class="col-md-3"><input name="rollNumber" class="form-control" placeholder="Roll number" /></div>
+    <div class="col-md-3"><input name="firstName" class="form-control" placeholder="First name" /></div>
+    <div class="col-md-3"><input name="lastName" class="form-control" placeholder="Last name" /></div>
+    <div class="col-md-3"><button class="btn btn-primary w-100">Add Student</button></div>
+</form>
+
+<table class="table">
+    <thead><tr><th>Roll No</th><th>Name</th></tr></thead>
+    <tbody>
+        @foreach (var s in Model.Students)
+        {
+            <tr><td>@s.RollNumber</td><td>@s.FullName</td></tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Index">← Back to classes</a>

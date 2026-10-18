@@ -1,0 +1,66 @@
+﻿@using EduTrack.Models
+@model MarkViewModel
+@{
+    ViewData["Title"] = "Mark Attendance";
+}
+
+<h2>Mark Attendance – @Model.ClassName</h2>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form method="get" class="row g-2 mb-3">
+    <input type="hidden" name="classId" value="@Model.ClassId" />
+    <div class="col-auto"><input type="date" name="date" class="form-control" value="@Model.Date.ToString("yyyy-MM-dd")" /></div>
+    <div class="col-auto"><button class="btn btn-outline-primary">Load date</button></div>
+</form>
+
+<form method="post" asp-action="Mark">
+    <input type="hidden" name="ClassId" value="@Model.ClassId" />
+    <input type="hidden" name="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+
+    <button type="button" class="btn btn-success btn-sm mb-2" onclick="markAllPresent()">Mark All Present</button>
+
+    <table class="table align-middle">
+        <thead><tr><th>Roll</th><th>Name</th><th>Status</th></tr></thead>
+        <tbody>
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                var item = Model.Items[i];
+                <tr>
+                    <td>@item.RollNumber</td>
+                    <td>@item.Name</td>
+                    <td>
+                        <input type="hidden" name="Items[@i].StudentId" value="@item.StudentId" />
+                        @foreach (var st in Enum.GetValues<AttendanceStatus>())
+                        {
+                            <label class="me-3">
+                                <input type="radio" name="Items[@i].Status" value="@((int)st)" @(item.Status == st ? "checked" : "") /> @st
+                            </label>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.Items.Any())
+    {
+        <button class="btn btn-primary">Save Attendance</button>
+    }
+    else
+    {
+
+        <p class="text-muted">No students in this class yet.</p>
+    }
+    <a class="btn btn-link" asp-controller="Classes" asp-action="Index">Back</a>
+</form>
+
+@section Scripts {
+    <script>
+        function markAllPresent() {
+            document.querySelectorAll('input[type=radio][value="0"]').forEach(r => r.checked = true);
+        }
+    </script>
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAIka8Igjc5kSHtAX9zjWAvgAAAAACAAAAAAAQZgAAAAEAACAAAABPihSNqq7A6KLIx+NbQGXaySMNuVO4YyWCWMsiR7RFeAAAAAAOgAAAAAIAACAAAADAlEvMvsVoNeWZgq+p8TgojdHnld6a63ncnvAazUlaMSAAAADRpHUlqGOsJb9gY8ZmVXi82BHpuoFDO+zxCPX1lEV6KkAAAADkCjBVmKpvzEwgRkQI2CQefoOz/RWQvPFGAIW9ht78x7rkQrNOPN50MmW/acaWYmNCEkCCYBfxTYa2/UFvfimz</EncryptedPassword>
+    <History>False|2026-10-16T10:48:49.7287015Z||;False|2026-10-16T16:17:18.5558638+05:30||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=%28localdb%29\MSSQLLocalDB%3bDatabase=EduTrackDb%3bTrusted_Connection=True%3bMultipleActiveResultSets=true%3bTrustServerCertificate=True</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="EduTrack.Data.ApplicationDbContext">
+      <Value>Server=%28localdb%29\MSSQLLocalDB%3bDatabase=EduTrackDb%3bTrusted_Connection=True%3bMultipleActiveResultSets=true%3bTrustServerCertificate=True</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

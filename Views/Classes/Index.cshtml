@@ -1,0 +1,72 @@
+﻿@using EduTrack.Models
+@model List<Classroom>
+
+@{
+ViewData["Title"] = "My Classes";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>My Classes</h2>
+
+
+<a class="btn btn-primary" asp-action="Create">
+    + Create Class
+</a>
+
+
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Class</th>
+            <th>Division</th>
+            <th>Subject</th>
+            <th>Year</th>
+            <th>Students</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+
+<tbody>
+    @foreach (var c in Model)
+    {
+        <tr>
+            <td>@c.Name</td>
+            <td>@c.Division</td>
+            <td>@c.Subject</td>
+            <td>@c.AcademicYear</td>
+            <td>@c.Students.Count</td>
+
+            <td class="text-end text-nowrap">
+                <a class="btn btn-sm btn-outline-secondary"
+                   asp-action="Details"
+                   asp-route-id="@c.Id">
+                    Students
+                </a>
+
+                <a class="btn btn-sm btn-success"
+                   asp-controller="Attendance"
+                   asp-action="Mark"
+                   asp-route-classId="@c.Id">
+                    Take Attendance
+                </a>
+
+                <a class="btn btn-sm btn-primary"
+                   asp-controller="Attendance"
+                   asp-action="Monthly"
+                   asp-route-classId="@c.Id">
+                    Monthly Attendance
+                </a>
+            </td>
+        </tr>
+    }
+</tbody>
+
+</table>
+
+@if (!Model.Any())
+{ <p class="text-muted">
+No classes yet. Click "Create Class" to add one. </p>
+}

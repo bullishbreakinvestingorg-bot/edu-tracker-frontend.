@@ -1,0 +1,19 @@
+﻿@using EduTrack.Models
+@{
+    ViewData["Title"] = "Create Class";
+}
+
+<h2>Create Class</h2>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form method="post" asp-action="Create" style="max-width:420px">
+    <div class="mb-3"><label class="form-label">Class name</label><input name="name" class="form-control" placeholder="TY CSE" /></div>
+    <div class="mb-3"><label class="form-label">Division</label><input name="division" class="form-control" placeholder="A" /></div>
+    <div class="mb-3"><label class="form-label">Subject</label><input name="subject" class="form-control" placeholder="Python" /></div>
+    <div class="mb-3"><label class="form-label">Academic year</label><input name="academicYear" class="form-control" value="2026-27" /></div>
+    <button class="btn btn-primary">Create</button>
+    <a class="btn btn-link" asp-action="Index">Cancel</a>
+</form>

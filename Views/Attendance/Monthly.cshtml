@@ -1,0 +1,109 @@
+﻿@using EduTrack.Models
+@model MonthlyViewModel
+@{
+    ViewData["Title"] = "Monthly Attendance";
+    var prev = Model.MonthStart.AddMonths(-1).ToString("yyyy-MM");
+    var next = Model.MonthStart.AddMonths(1).ToString("yyyy-MM");
+    var thisMonth = Model.MonthStart.ToString("yyyy-MM");
+}
+
+<h2 class="mb-3">Monthly Attendance</h2>
+
+@if (!Model.Classes.Any())
+{
+    <p class="text-muted">You have no classes yet. <a asp-controller="Classes" asp-action="Create">Create one</a>.</p>
+}
+else
+{
+    <form method="get" class="row g-2 mb-3 d-print-none">
+        <div class="col-auto">
+            <select name="classId" class="form-select" onchange="this.form.submit()">
+                @foreach (var c in Model.Classes)
+                {
+                    <option value="@c.Id" selected="@(c.Id == Model.ClassId)">@c.Name @c.Division - @c.Subject</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto"><input type="month" name="month" value="@thisMonth" class="form-control" /></div>
+        <div class="col-auto"><button class="btn btn-primary">Show</button></div>
+        <div class="col-auto">
+            <a class="btn btn-outline-secondary" asp-action="Monthly" asp-route-classId="@Model.ClassId" asp-route-month="@prev">&laquo; Prev</a>
+            <a class="btn btn-outline-secondary" asp-action="Monthly" asp-route-classId="@Model.ClassId" asp-route-month="@next">Next &raquo;</a>
+        </div>
+        <div class="col-auto"><button type="button" class="btn btn-outline-dark" onclick="window.print()">Print</button></div>
+        <div class="col-auto">
+            <a class="btn btn-success" asp-action="ExportMonthly" asp-route-classId="@Model.ClassId" asp-route-month="@thisMonth">Download Excel (CSV)</a>
+        </div>
+    </form>
+
+    <h5>@Model.ClassName &ndash; @Model.MonthStart.ToString("MMMM yyyy")</h5>
+    <p class="small text-muted">
+        <span class="text-success fw-bold">P</span> = Present &nbsp;
+        <span class="text-warning fw-bold">L</span> = Late &nbsp;
+        <span class="text-danger fw-bold">A</span> = Absent &nbsp;
+        <span>&middot;</span> = not recorded &nbsp; (grey columns are weekends)
+    </p>
+
+    @if (!Model.Rows.Any())
+    {
+        <p class="text-muted">This class has no students yet.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm text-center align-middle" style="font-size:13px">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-start">Roll</th>
+                        <th class="text-start">Name</th>
+                        @for (int d = 1; d <= Model.DaysInMonth; d++)
+                        {
+                            var dt = new DateTime(Model.MonthStart.Year, Model.MonthStart.Month, d);
+                            var weekend = dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday;
+                            var letter = dt.ToString("ddd").Substring(0, 1);
+                            <th class="@(weekend ? "text-muted bg-secondary-subtle" : "")">@d<br /><small>@letter</small></th>
+                        }
+                        <th>P</th>
+                        <th>L</th>
+                        <th>A</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        <td class="text-start">@row.RollNumber</td>
+                        <td class="text-start text-nowrap">@row.Name</td>
+                        @for (int d = 1; d <= Model.DaysInMonth; d++)
+                        {
+                            if (row.Days.TryGetValue(d, out var st))
+                            {
+                                var txt = st == AttendanceStatus.Present ? "P" : st == AttendanceStatus.Late ? "L" : "A";
+                                var cls = st == AttendanceStatus.Present ? "text-success" : st == AttendanceStatus.Late ? "text-warning" : "text-danger";
+                                <td class="fw-bold @cls">@txt</td>
+                            }
+                            else
+                            {
+                                <td class="text-muted">&middot;</td>
+                            }
+                        }
+                        <td>@row.Present</td>
+                        <td>@row.Late</td>
+                        <td>@row.Absent</td>
+                        @if (row.Percent.HasValue)
+                        {
+                            var pc = row.Percent.Value < 75 ? "text-danger" : row.Percent.Value < 85 ? "text-warning" : "text-success";
+                            <td class="fw-bold @pc">@row.Percent.Value.ToString("0")%</td>
+                        }
+                        else
+                        {
+                            <td class="text-muted">-</td>
+                        }
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+}

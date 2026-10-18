@@ -1,0 +1,125 @@
+﻿@model List<EduTrack.Models.Student>
+
+@{
+    var ev = (EduTrack.Models.Event)ViewBag.Event;
+    var participations =
+        (Dictionary<int, bool>)ViewBag.Participations;
+
+    ViewData["Title"] = "Event Attendance";
+}
+
+<h2 class="mb-2">Event Attendance</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5>@ev.Name</h5>
+
+        <p class="mb-1">
+            <strong>Date:</strong>
+            @ev.Date.ToString("dd MMM yyyy")
+        </p>
+
+        <p class="mb-0">
+            <strong>Class:</strong>
+            @ev.Classroom?.Name
+        </p>
+    </div>
+</div>
+
+<!-- Download Excel Button -->
+<div class="mb-3">
+    <a asp-controller="Events"
+       asp-action="DownloadAttendance"
+       asp-route-id="@ev.Id"
+       class="btn btn-primary">
+        Download Excel
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No students are registered in this class.
+    </div>
+}
+else
+{
+    <form asp-action="Attendance"
+          asp-route-id="@ev.Id"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <div class="d-flex justify-content-between
+            align-items-center mb-3">
+            <h5>Student List</h5>
+
+            <button type="button"
+                    class="btn btn-sm btn-outline-primary"
+                    onclick="toggleAll(this)">
+                Select All Present
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Student Name</th>
+                        <th>Present</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var student in Model)
+                    {
+                        var isPresent =
+                            participations.TryGetValue(
+                                student.Id, out var status)
+                            && status;
+
+                        <tr>
+                            <td>@student.RollNumber</td>
+                            <td>@student.FullName</td>
+                            <td>
+                                <input type="checkbox"
+                                       class="form-check-input present-check"
+                                       name="presentStudentIds"
+                                       value="@student.Id"
+                                       checked="@isPresent" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Save Event Attendance
+        </button>
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+            Cancel
+        </a>
+    </form>
+}
+
+@section Scripts {
+    <script>
+        function toggleAll(button) {
+            const checkboxes =
+                document.querySelectorAll(".present-check");
+
+            const selectAll =
+                Array.from(checkboxes).some(c => !c.checked);
+
+            checkboxes.forEach(c => c.checked = selectAll);
+
+            button.textContent = selectAll
+                ? "Unselect All"
+                : "Select All Present";
+        }
+    </script>
+}

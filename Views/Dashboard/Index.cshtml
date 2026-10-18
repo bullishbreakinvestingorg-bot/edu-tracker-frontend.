@@ -1,0 +1,139 @@
+﻿
+@using EduTrack.Models
+@model DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var kpis = new List<(string Label, string Value)>
+    {
+        ("Total Students", Model.TotalStudents.ToString()),
+        ("Classes", Model.TotalClasses.ToString()),
+        ("Avg Attendance", Model.AverageAttendance.ToString("0.0") + "%"),
+        ("At-Risk Students", Model.AtRisk.Count.ToString())
+    };
+}
+
+<h2 class="mb-3">Dashboard</h2>
+
+<!-- Dashboard Statistics -->
+<div class="row g-3 mb-3">
+    @foreach (var k in kpis)
+    {
+        <div class="col-6 col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="fs-3 fw-bold">@k.Value</div>
+                    <div class="text-muted small">@k.Label</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row g-3">
+
+    <!-- Attendance by Class -->
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Attendance by class</h5>
+
+                @if (!Model.ClassAverages.Any())
+                {
+                    <p class="text-muted">No attendance recorded yet.</p>
+                }
+                else
+                {
+                    @foreach (var c in Model.ClassAverages)
+                    {
+                        var color = c.Average < 75
+                            ? "bg-danger"
+                            : c.Average < 85
+                                ? "bg-warning"
+                                : "bg-success";
+
+                        var width = c.Average.ToString(
+                            System.Globalization.CultureInfo.InvariantCulture);
+
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between small">
+                                <span>@c.Name</span>
+                                <span>@c.Average.ToString("0.0")%</span>
+                            </div>
+
+                            <div class="progress">
+                                <div class="progress-bar @color"
+                                     style="width:@(width)%">
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Intervention List -->
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Intervention list (below 75%)</h5>
+
+                @if (!Model.AtRisk.Any())
+                {
+                    <p class="text-muted">No at-risk students.</p>
+                }
+                else
+                {
+                    @foreach (var s in Model.AtRisk)
+                    {
+                        <div class="alert alert-danger d-flex justify-content-between py-2 mb-2">
+                            <span>
+                                @s.Name
+                                <small>(@s.ClassName)</small>
+                            </span>
+
+                            <strong>
+                                @(s.Percent!.Value.ToString("0.0"))%
+                            </strong>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Events -->
+<div class="card shadow-sm mt-3">
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Recent events</h5>
+
+            <a asp-controller="Events"
+               asp-action="Index"
+               class="btn btn-primary btn-sm">
+                Manage Events
+            </a>
+        </div>
+
+        @if (!Model.RecentEvents.Any())
+        {
+            <p class="text-muted">No events yet.</p>
+        }
+        else
+        {
+            @foreach (var e in Model.RecentEvents)
+            {
+                <div class="d-flex justify-content-between border-bottom py-2">
+                    <span>@e.Name</span>
+                    <span class="text-muted">
+                        @e.Date.ToString("dd MMM yyyy")
+                    </span>
+                </div>
+            }
+        }
+    </div>
+</div>

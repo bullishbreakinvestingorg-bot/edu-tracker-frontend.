@@ -1,0 +1,66 @@
+﻿@model EduTrack.Models.Event
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<h2 class="mb-4">Create Event</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">
+                    Event Name
+                </label>
+                <input asp-for="Name"
+                       class="form-control"
+                       placeholder="Enter event name" />
+                <span asp-validation-for="Name"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Date" class="form-label">
+                    Event Date
+                </label>
+                <input asp-for="Date"
+                       type="date"
+                       class="form-control"
+                       value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="Date"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Select Class</label>
+                <select asp-for="ClassroomId"
+                        asp-items="ViewBag.Classrooms"
+                        class="form-select">
+                    <option value="">-- Select Class --</option>
+                </select>
+                <span asp-validation-for="ClassroomId"
+                      class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Save Event
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
