@@ -1,534 +1,155 @@
 ﻿
-@page
-@model LoginModel
+/* EduTrack — Light Premium Theme */
 
-@{
-    ViewData["Title"] = "Welcome Back";
+.et-login {
+    --et-text: #202b45;
+    --et-muted: #77839c;
+    background:
+        radial-gradient(ellipse at 10% 10%, #dce8ff 0%, transparent 45%),
+        radial-gradient(ellipse at 95% 90%, #d9f5ff 0%, transparent 40%),
+        #f5f7fc;
+    color: #202b45;
 }
 
-<style>
-    :root {
-        --et-bg: #070b18;
-        --et-card: rgba(17, 25, 48, .86);
-        --et-blue: #6d8cff;
-        --et-cyan: #55e6ff;
-        --et-text: #f3f6ff;
-        --et-muted: #9ba8c7;
+.et-orb {
+    opacity: .18;
+    filter: blur(95px);
+}
+
+.et-orb.one { background: #809cff; }
+.et-orb.two { background: #6ad8eb; }
+
+.et-shell {
+    background: rgba(255,255,255,.94);
+    border: 1px solid #e7ebf5;
+    box-shadow: 0 24px 70px rgba(44, 65, 115, .10);
+    backdrop-filter: blur(18px);
+    transition: box-shadow .3s ease, transform .3s ease;
+}
+
+.et-shell:hover {
+    box-shadow: 0 28px 78px rgba(44, 65, 115, .14);
+    transform: translateY(-2px);
+}
+
+/* Soft blue showcase panel */
+.et-showcase {
+    background:
+        radial-gradient(ellipse at 90% 10%, #d9e6ff 0%, transparent 48%),
+        linear-gradient(145deg, #f0f4ff, #e8f5ff);
+    border-right: 1px solid #e0e8f7;
+}
+
+.et-showcase::before {
+    border-color: #8aa5e72b;
+    box-shadow:
+        0 0 0 35px #8aa5e710,
+        0 0 0 75px #8aa5e708;
+}
+
+.et-brand-name { color: #243453; }
+.et-brand-sub { color: #8290aa; }
+
+.et-logo {
+    background: linear-gradient(135deg, #668bff, #8069e9);
+    box-shadow: 0 7px 20px #7189e92b;
+}
+
+.et-pill {
+    color: #536fd0;
+    background: #ffffffa8;
+    border-color: #cbd8fa;
+}
+
+.et-hero h1 { color: #202d49; }
+.et-hero p { color: #74819a; }
+
+.et-feature { color: #465572; }
+
+.et-feature-icon {
+    color: #627fe0;
+    background: #ffffffbd;
+    border-color: #dce5fa;
+}
+
+.et-footnote { color: #8491a8; }
+
+/* Form area */
+.et-form-side h2 { color: #202b45; }
+.et-subtitle { color: #8490a6; }
+
+.et-label { color: #43516d; }
+
+.et-input {
+    color: #26334e;
+    background: #f8faff;
+    border-color: #e1e7f2;
+}
+
+.et-input::placeholder { color: #a0aabe; }
+.et-input-icon { color: #8798bd; }
+
+.et-input:hover { border-color: #b9c8f2; }
+
+.et-input:focus {
+    background: #fff;
+    border-color: #8199f6;
+    box-shadow: 0 0 0 4px #8199f61b;
+}
+
+.et-remember { color: #65728b; }
+.et-link { color: #627be0; }
+.et-link:hover { color: #4b5fc4; }
+
+.et-submit {
+    background: linear-gradient(105deg, #6486f4, #8270e9);
+    box-shadow: 0 6px 18px #7188e927;
+}
+
+.et-submit:hover {
+    box-shadow: 0 9px 24px #7188e93a;
+    filter: brightness(1.035);
+}
+
+.et-register { color: #8792a7; }
+
+.et-divider { color: #98a2b6; }
+
+.et-divider::before,
+.et-divider::after { background: #e9edf5; }
+
+.et-external button {
+    color: #475570;
+    background: #fafbff;
+    border-color: #e3e8f3;
+}
+
+.et-external button:hover {
+    background: #f0f4ff;
+    border-color: #cbd7fb;
+}
+
+/* Gentle animation, not flashy */
+.et-shell {
+    animation: et-light-enter .65s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.et-orb {
+    animation-duration: 18s;
+}
+
+@@keyframes et-light-enter {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@@media (prefers-reduced-motion: reduce) {
+    .et-shell, .et-orb, .et-pulse {
+        animation: none !important;
     }
 
-    .et-login, .et-login * { box-sizing: border-box; }
-
-    .et-login {
-        min-height: 88vh;
-        padding: 34px 20px;
-        display: grid;
-        place-items: center;
-        position: relative;
-        isolation: isolate;
-        overflow: hidden;
-        color: var(--et-text);
-        background:
-            radial-gradient(ellipse at 12% 15%, #243a792e, transparent 42%),
-            radial-gradient(ellipse at 88% 80%, #087c9230, transparent 38%),
-            var(--et-bg);
-        font-family: Inter, "Segoe UI", sans-serif;
-        border-radius: 22px;
+    .et-shell, .et-feature, .et-submit {
+        transition: none !important;
     }
-
-    .et-orb {
-        position: absolute;
-        z-index: -1;
-        width: 310px;
-        height: 310px;
-        border-radius: 50%;
-        filter: blur(85px);
-        opacity: .34;
-        pointer-events: none;
-        animation: et-float 12s ease-in-out infinite alternate;
-    }
-
-    .et-orb.one { background: #526fff; top: -100px; left: -70px; }
-    .et-orb.two {
-        background: #00c8dc;
-        right: -90px;
-        bottom: -100px;
-        animation-delay: -5s;
-    }
-
-    .et-shell {
-        width: min(100%, 1010px);
-        display: grid;
-        grid-template-columns: 1fr .9fr;
-        border: 1px solid rgba(167, 187, 255, .17);
-        border-radius: 27px;
-        overflow: hidden;
-        background: rgba(10, 16, 34, .58);
-        box-shadow: 0 35px 100px #0007, 0 0 55px #5779ff0c;
-        backdrop-filter: blur(24px);
-        animation: et-enter .75s cubic-bezier(.2,.75,.2,1) both;
-    }
-
-    .et-showcase {
-        position: relative;
-        min-height: 590px;
-        padding: 44px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        overflow: hidden;
-        background:
-            linear-gradient(145deg, #18264cbb, #0c1429e8),
-            #111a32;
-        border-right: 1px solid #a8b9ff17;
-    }
-
-    .et-showcase::before {
-        content: "";
-        position: absolute;
-        width: 340px;
-        height: 340px;
-        border: 1px solid #7d9aff20;
-        border-radius: 50%;
-        right: -150px;
-        top: 90px;
-        box-shadow: 0 0 0 35px #7d9aff08, 0 0 0 75px #7d9aff05;
-        animation: et-rotate 35s linear infinite;
-        pointer-events: none;
-    }
-
-    .et-brand {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        position: relative;
-        z-index: 1;
-    }
-
-    .et-logo {
-        display: grid;
-        place-items: center;
-        width: 47px;
-        height: 47px;
-        flex-shrink: 0;
-        border-radius: 15px;
-        color: white;
-        font-size: 24px;
-        font-weight: 800;
-        background: linear-gradient(135deg, #7996ff, #5665e8 60%, #4cdbf4);
-        box-shadow: 0 8px 28px #627fff44;
-    }
-
-    .et-brand-name { font-size: 21px; font-weight: 750; letter-spacing: -.7px; }
-    .et-brand-sub { color: #9eadd0; font-size: 11px; margin-top: 3px; letter-spacing: 1.6px; }
-
-    .et-hero { position: relative; z-index: 1; margin: 45px 0; }
-
-    .et-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border: 1px solid #8da8ff35;
-        background: #7994ff12;
-        color: #b9caff;
-        border-radius: 30px;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-    }
-
-    .et-pulse {
-        width: 7px;
-        height: 7px;
-        background: #67edcf;
-        border-radius: 50%;
-        box-shadow: 0 0 12px #67edcf;
-        animation: et-pulse 2s ease-in-out infinite;
-    }
-
-    .et-hero h1 {
-        font-size: clamp(35px, 4vw, 49px);
-        line-height: 1.12;
-        letter-spacing: -2px;
-        margin: 24px 0 17px;
-        font-weight: 800;
-    }
-
-    .et-gradient {
-        background: linear-gradient(100deg, #91aaff, #6de7ff);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
-    }
-
-    .et-hero p {
-        max-width: 340px;
-        font-size: 14px;
-        line-height: 1.9;
-        color: #a6b3d0;
-        margin: 0;
-    }
-
-    .et-features { display: grid; gap: 17px; margin-top: 32px; }
-
-    .et-feature {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: #d9e2fa;
-        font-size: 13px;
-        transition: transform .25s ease, color .25s ease;
-    }
-
-    .et-feature:hover { transform: translateX(5px); color: white; }
-
-    .et-feature-icon {
-        width: 34px;
-        height: 34px;
-        display: grid;
-        place-items: center;
-        border-radius: 11px;
-        border: 1px solid #8ea7ff26;
-        background: #839cff12;
-        color: #a9bbff;
-        font-size: 16px;
-    }
-
-    .et-footnote { color: #8291b2; font-size: 11px; position: relative; z-index: 1; }
-
-    .et-form-side {
-        padding: 50px 43px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-width: 0;
-    }
-
-    .et-mobile-brand { display: none; }
-
-    .et-form-side h2 {
-        font-size: 30px;
-        font-weight: 780;
-        letter-spacing: -1px;
-        margin: 0 0 9px;
-    }
-
-    .et-subtitle { color: var(--et-muted); font-size: 13px; line-height: 1.7; margin: 0 0 31px; }
-
-    .et-validation {
-        color: #ffaaaa;
-        background: #ff666610;
-        border: 1px solid #ff777728;
-        border-radius: 11px;
-        padding: 10px 13px;
-        font-size: 12px;
-        margin-bottom: 18px;
-    }
-
-    .et-validation:empty { display: none; }
-
-    .et-field { margin-bottom: 20px; }
-
-    .et-label {
-        display: block;
-        font-size: 12px;
-        color: #d5def4;
-        font-weight: 650;
-        margin-bottom: 9px;
-    }
-
-    .et-input-wrap { position: relative; }
-
-    .et-input-icon {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #8295c4;
-        font-size: 16px;
-        pointer-events: none;
-        transition: color .2s;
-    }
-
-    .et-input {
-        width: 100%;
-        height: 51px;
-        border: 1px solid #879ac329;
-        border-radius: 12px;
-        background: #080f21a8;
-        color: #f4f7ff;
-        padding: 0 15px 0 43px;
-        outline: none;
-        font: inherit;
-        font-size: 13px;
-        transition: border-color .25s, box-shadow .25s, background .25s;
-    }
-
-    .et-input::placeholder { color: #697797; }
-
-    .et-input:hover { border-color: #8da5e65c; }
-
-    .et-input:focus {
-        border-color: #8197ff;
-        background: #101a33;
-        box-shadow: 0 0 0 4px #738cff18, 0 0 24px #6886ff0b;
-    }
-
-    .et-input-wrap:focus-within .et-input-icon { color: #9fb1ff; }
-
-    .et-error { display: block; color: #ffaaaa; font-size: 11px; margin-top: 6px; }
-
-    .et-options {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin: 2px 0 24px;
-        font-size: 12px;
-    }
-
-    .et-remember { display: flex; align-items: center; gap: 8px; color: #aab6d1; cursor: pointer; }
-    .et-remember input { accent-color: #8096ff; width: 14px; height: 14px; }
-
-    .et-link { color: #9eafff; text-decoration: none; transition: color .2s; }
-    .et-link:hover { color: #70e7ff; text-decoration: none; }
-
-    .et-submit {
-        position: relative;
-        isolation: isolate;
-        overflow: hidden;
-        width: 100%;
-        min-height: 52px;
-        border: 0;
-        border-radius: 12px;
-        color: white;
-        font-size: 14px;
-        font-weight: 750;
-        letter-spacing: .2px;
-        cursor: pointer;
-        background: linear-gradient(105deg, #637ff5, #7969ef 55%, #398fdf);
-        box-shadow: 0 9px 27px #637cf52c;
-        transition: transform .25s, box-shadow .25s, filter .25s;
-    }
-
-    .et-submit::before {
-        content: "";
-        position: absolute;
-        z-index: -1;
-        top: -50%;
-        left: -80%;
-        width: 45%;
-        height: 200%;
-        transform: rotate(25deg);
-        background: linear-gradient(90deg, transparent, #ffffff55, transparent);
-        transition: left .65s ease;
-    }
-
-    .et-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 14px 35px #637cf548;
-        filter: brightness(1.08);
-    }
-
-    .et-submit:hover::before { left: 140%; }
-    .et-submit:active { transform: translateY(0) scale(.99); }
-
-    .et-register {
-        margin-top: 25px;
-        text-align: center;
-        font-size: 12px;
-        color: #95a3c0;
-    }
-
-    .et-divider {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin: 24px 0;
-        color: #7786a6;
-        font-size: 11px;
-    }
-
-    .et-divider::before, .et-divider::after {
-        content: "";
-        height: 1px;
-        flex: 1;
-        background: #9cadd31c;
-    }
-
-    .et-external {
-        display: grid;
-        gap: 10px;
-    }
-
-    .et-external button {
-        width: 100%;
-        min-height: 44px;
-        border: 1px solid #9cadd329;
-        border-radius: 11px;
-        color: #dce5ff;
-        background: #ffffff05;
-        cursor: pointer;
-        transition: background .2s, border-color .2s, transform .2s;
-    }
-
-    .et-external button:hover {
-        background: #849cff12;
-        border-color: #8da5e65c;
-        transform: translateY(-1px);
-    }
-
-    .et-form-side a:focus-visible, .et-submit:focus-visible {
-        outline: 2px solid #76e5ff;
-        outline-offset: 4px;
-    }
-
-    @@keyframes et-enter {
-        from { opacity: 0; transform: translateY(18px) scale(.99); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    @@keyframes et-float {
-        from { transform: translate(0, 0) scale(1); }
-        to { transform: translate(45px, 30px) scale(1.16); }
-    }
-
-    @@keyframes et-rotate { to { transform: rotate(360deg); } }
-
-    @@keyframes et-pulse {
-        0%, 100% { opacity: 1; box-shadow: 0 0 12px #67edcf; }
-        50% { opacity: .55; box-shadow: 0 0 4px #67edcf; }
-    }
-
-    @@media (max-width: 760px) {
-        .et-login { padding: 18px 10px; min-height: auto; border-radius: 16px; }
-        .et-shell { grid-template-columns: 1fr; max-width: 460px; }
-        .et-showcase { display: none; }
-        .et-form-side { padding: 34px 25px; }
-        .et-mobile-brand { display: flex; margin-bottom: 35px; }
-        .et-form-side h2 { font-size: 28px; }
-    }
-
-    @@media (prefers-reduced-motion: reduce) {
-        .et-login *, .et-login *::before, .et-login *::after {
-            animation-duration: .01ms !important;
-            animation-iteration-count: 1 !important;
-            scroll-behavior: auto !important;
-            transition-duration: .01ms !important;
-        }
-    }
-</style>
-
-<div class="et-login">
-    <div class="et-orb one"></div>
-    <div class="et-orb two"></div>
-
-    <div class="et-shell">
-        <section class="et-showcase">
-            <div class="et-brand">
-                <div class="et-logo">E</div>
-                <div>
-                    <div class="et-brand-name">EduTrack</div>
-                    <div class="et-brand-sub">SMART CAMPUS PLATFORM</div>
-                </div>
-            </div>
-
-            <div class="et-hero">
-                <div class="et-pill"><span class="et-pulse"></span> Your campus, connected</div>
-                <h1>Make every<br />day a step<br />toward <span class="et-gradient">success.</span></h1>
-                <p>Your academic journey, attendance and campus life — all organised in one intelligent space.</p>
-
-                <div class="et-features">
-                    <div class="et-feature">
-                        <span class="et-feature-icon">◷</span>
-                        <span>Track attendance with ease</span>
-                    </div>
-                    <div class="et-feature">
-                        <span class="et-feature-icon">▤</span>
-                        <span>Keep academic records organised</span>
-                    </div>
-                    <div class="et-feature">
-                        <span class="et-feature-icon">↗</span>
-                        <span>Stay focused on your progress</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="et-footnote">A smarter way to manage your campus life.</div>
-        </section>
-
-        <section class="et-form-side">
-            <div class="et-brand et-mobile-brand">
-                <div class="et-logo">E</div>
-                <div>
-                    <div class="et-brand-name">EduTrack</div>
-                    <div class="et-brand-sub">SMART CAMPUS PLATFORM</div>
-                </div>
-            </div>
-
-            <h2>Welcome back<span class="et-gradient">.</span></h2>
-            <p class="et-subtitle">Sign in to your account and pick up where you left off.</p>
-
-            <form id="account" method="post">
-                <div asp-validation-summary="ModelOnly" class="et-validation" role="alert"></div>
-
-                <div class="et-field">
-                    <label asp-for="Input.Email" class="et-label">Email address</label>
-                    <div class="et-input-wrap">
-                        <span class="et-input-icon">✉</span>
-                        <input asp-for="Input.Email" class="et-input" autocomplete="username"
-                               aria-required="true" placeholder="you@example.com" />
-                    </div>
-                    <span asp-validation-for="Input.Email" class="et-error"></span>
-                </div>
-
-                <div class="et-field">
-                    <label asp-for="Input.Password" class="et-label">Password</label>
-                    <div class="et-input-wrap">
-                        <span class="et-input-icon">▣</span>
-                        <input asp-for="Input.Password" class="et-input" autocomplete="current-password"
-                               aria-required="true" placeholder="Enter your password" />
-                    </div>
-                    <span asp-validation-for="Input.Password" class="et-error"></span>
-                </div>
-
-                <div class="et-options">
-                    <label asp-for="Input.RememberMe" class="et-remember">
-                        <input asp-for="Input.RememberMe" />
-                        Remember me
-                    </label>
-                    <a asp-page="./ForgotPassword" class="et-link">Forgot password?</a>
-                </div>
-
-                <button id="login-submit" type="submit" class="et-submit">Sign in to EduTrack &nbsp; →</button>
-
-                <div class="et-register">
-                    New to EduTrack?
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="et-link">Create an account</a>
-                </div>
-            </form>
-
-            @if ((Model.ExternalLogins?.Count ?? 0) > 0)
-            {
-                <div class="et-divider">OR CONTINUE WITH</div>
-                <form id="external-account" asp-page="./ExternalLogin"
-                      asp-route-returnUrl="@Model.ReturnUrl" method="post" class="et-external">
-                    @foreach (var provider in Model.ExternalLogins!)
-                    {
-                        <button type="submit" name="provider" value="@provider.Name"
-                                title="Log in using your @provider.DisplayName account">
-                            Continue with @provider.DisplayName
-                        </button>
-                    }
-                </form>
-            }
-        </section>
-    </div>
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
 }
 
