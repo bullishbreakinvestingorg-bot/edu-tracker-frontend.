@@ -6,6 +6,7 @@ using Npgsql;
 using EduTracker.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddRazorPages();
 
 var databaseUrl = builder.Configuration["DATABASE_URL"];
 
